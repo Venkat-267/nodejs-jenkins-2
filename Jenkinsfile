@@ -20,8 +20,8 @@ pipeline {
             steps {
                 sh '''
                 npm install
-                sudo apt-get update
-                sudo apt-get install zip -y
+                apt-get update
+                apt-get install zip -y
                 '''
 
             }
