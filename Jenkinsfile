@@ -18,7 +18,12 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                npm install
+                sudo apt-get update
+                sudo apt-get install zip -y
+                '''
+'
             }
         }
 
