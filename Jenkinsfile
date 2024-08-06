@@ -5,7 +5,7 @@ pipeline {
         AWS_CREDENTIALS = credentials('aws-credentials-id') // Jenkins credentials ID for AWS
         AWS_REGION = 'ap-south-1'
         S3_BUCKET = 'nodejs-artifact-venkat'
-        EB_APP_NAME = 'nodejs-jenkins-demo
+        EB_APP_NAME = 'nodejs-jenkins-demo'
         EB_ENV_NAME = 'nodejs-jenkins-demo-env'
     }
 
