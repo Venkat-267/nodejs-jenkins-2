@@ -1,19 +1,9 @@
 {
-  "name": "my-node-app",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "Elastic-Beanstalk-Sample-App",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Venkat-267/nodejs-jenkins-2.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Venkat-267/nodejs-jenkins-2/issues"
-  },
-  "homepage": "https://github.com/Venkat-267/nodejs-jenkins-2#readme"
+    "start": "node app.js"
+  }
 }
