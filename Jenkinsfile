@@ -37,22 +37,34 @@ pipeline {
 
         stage('Upload to S3') {
             steps {
-                withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDENTIALS}") {
-                    s3Upload(bucket: "${S3_BUCKET}", file: 'hello-node-app.zip', path: "hello-node-app.zip")
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials-id',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh '''
+                    aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+                    aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+                    aws configure set region $AWS_REGION
+                    aws s3 cp hello-node-app.zip s3://$S3_BUCKET/hello-node-app.zip
+                    '''
                 }
             }
         }
 
         stage('Deploy to Elastic Beanstalk') {
             steps {
-                withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDENTIALS}") {
-                    elasticBeanstalkDeploy(
-                        applicationName: "${EB_APP_NAME}",
-                        environmentName: "${EB_ENV_NAME}",
-                        s3Bucket: "${S3_BUCKET}",
-                        s3Key: "hello-node-app.zip",
-                        versionLabel: "v${env.BUILD_NUMBER}"
-                    )
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-credentials-id',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh '''
+                    aws elasticbeanstalk create-application-version --application-name $EB_APP_NAME --version-label v$BUILD_NUMBER --source-bundle S3Bucket=$S3_BUCKET,S3Key=hello-node-app.zip
+                    aws elasticbeanstalk update-environment --environment-name $EB_ENV_NAME --version-label v$BUILD_NUMBER
+                    '''
                 }
             }
         }
